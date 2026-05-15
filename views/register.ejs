@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 97 - Sign Up</title>
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+    <h1>Project 97 - Sign Up</h1>
+    <form action="/signup" method="post" id="registration-form  ">
+        <label for="firstname">First Name: </label>
+        <input type="text" name="firstname" id="firstname" value="<%=locals.oldData?oldData.firstname:''%>">
+        <div class="err" id="fnameErr"><%=locals.fnameErr?fnameErr:''%></div>
+        <!-- remember to add "required" attributes later -->
+        <label for="lastname">Last Name: </label>
+        <input type="text" name="lastname" id="lastname" value="<%=locals.oldData?oldData.lastname:''%>">
+        <div class="err" id="lnameErr"><%=locals.lnameErr?lnameErr:''%></div>
+
+        <label for="username">Pick your username: </label>  
+        <input type="text" name="username" id="username" value="<%=locals.oldData?oldData.username:''%>">
+        <div class="err" id="unameErr"><%=locals.unameErr?unameErr:''%></div>
+
+        <label for="email">Email ID: </label>
+        <input type="email" name="email" id="email" value="<%=locals.oldData?oldData.email:''%>">
+        <div class="err" id="emailErr"><%=locals.emailErr?emailErr:''%></div>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <div class="err" id="passwordErr"><%=locals.passwordErr?passwordErr:''%></div>
+
+        <input type="submit" value="Sign Up">
+    </form>
+    <a href="/login">Already have an account? Login by clicking here!!!</a>
+    <script src="/js/register.validation.js"></script>
+</body>
+</html>
