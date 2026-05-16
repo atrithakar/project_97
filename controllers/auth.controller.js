@@ -1,3 +1,8 @@
+const jwt =require('jsonwebtoken');
+const bcrypt = require('bcrypt')
+const { v4: uuidv4 } = require('uuid');
+const { insertUserInDB, fetchPasswordHash } = require('../models/user.model');
+
 async function handleLogout(req, res) {
     try {
         res.clearCookie('token')
