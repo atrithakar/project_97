@@ -1,0 +1,385 @@
+/* GLOBAL RESET & DESERT PALETTE */
+:root {
+    --bg-sandstone: #f4f1eb;       /* Warm, serene off-white */
+    --text-canyon: #3a332c;        /* Deep, soft brownish-charcoal */
+    --accent-terracotta: #c87965;  /* Muted desert sunset red */
+    --accent-sage: #8b9986;        /* Muted agave/cactus green */
+    --card-white: #ffffff;
+    --shadow-soft: 0 4px 20px rgba(58, 51, 44, 0.08);
+    --shadow-hover: 0 12px 30px rgba(58, 51, 44, 0.15);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-sandstone);
+    color: var(--text-canyon);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* TOP NAVIGATION */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--bg-sandstone);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* Soft frosted glass effect for scrolling */
+    background: rgba(244, 241, 235, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(58, 51, 44, 0.05);
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-canyon);
+}
+
+.nav-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* FORM ELEMENTS & BUTTONS */
+.nav-input, .nav-select, .nav-btn {
+    background-color: var(--card-white);
+    border: 1px solid rgba(58, 51, 44, 0.1);
+    color: var(--text-canyon);
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.nav-input {
+    cursor: text;
+    width: 220px;
+}
+
+.nav-input::placeholder {
+    color: #999;
+}
+
+.nav-input:focus, .nav-select:focus {
+    border-color: var(--accent-sage);
+    box-shadow: 0 0 0 3px rgba(139, 153, 134, 0.2);
+}
+
+/* Button Variants */
+.nav-btn:hover, .nav-select:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-primary {
+    background-color: var(--accent-terracotta);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #b56754;
+}
+
+.btn-ghost {
+    background-color: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(58, 51, 44, 0.05);
+    box-shadow: none;
+}
+
+.inline-form {
+    display: inline;
+}
+
+/* MASONRY FEED (CSS GRID) */
+/* .feed-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+} */
+
+/* IMAGE CARDS */
+.pgta-card {
+    background-color: var(--card-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.pgta-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
+.pgta-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    /* Removed the harsh grayscale from the hacker theme */
+}
+
+.card-meta {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.meta-user {
+    color: var(--text-canyon);
+    font-weight: 600;
+}
+
+.meta-loc {
+    color: var(--accent-sage);
+}
+
+
+
+
+/* TRUE MASONRY FEED (CSS COLUMNS) */
+.feed-container {
+    /* 1. Set the fixed width you want for the images */
+    column-width: 320px; 
+    column-gap: 30px;
+    padding: 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* IMAGE CARDS */
+.pgta-card {
+    background-color: var(--card-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    
+    /* 2. Prevent the browser from slicing a card in half across columns */
+    break-inside: avoid; 
+    margin-bottom: 30px; 
+    display: inline-block; 
+    width: 100%;
+}
+
+.pgta-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
+.pgta-card img {
+    /* 3. The Aspect Ratio Magic */
+    width: 100%;       /* Force the image to match the 320px column width */
+    height: auto;      /* Force the height to scale naturally to prevent stretching */
+    display: block;    /* Removes the tiny blank space browsers put under inline images */
+}
+
+.card-meta {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.meta-user {
+    color: var(--text-canyon);
+    font-weight: 600;
+}
+
+.meta-loc {
+    color: var(--accent-sage);
+}
+
+
+/* MOBILE TOGGLE BUTTON (Hidden on Desktop) */
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-canyon);
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* RESPONSIVE BREAKPOINT: Tablets & Mobile (Screens smaller than 1024px) */
+@media (max-width: 1160px) {
+    .top-nav {
+        flex-wrap: wrap; /* Allows the menu to drop below the logo */
+        padding: 15px 20px;
+    }
+
+    .mobile-toggle {
+        display: block; /* Show the hamburger */
+    }
+
+    .nav-controls {
+        width: 100%;
+        flex-direction: column; /* Stack them vertically */
+        align-items: stretch;   /* Stretch inputs to full width */
+        padding-top: 20px;
+        gap: 15px;
+        
+        /* Hidden by default on mobile */
+        display: none; 
+    }
+
+    /* This class will be toggled by JavaScript */
+    .nav-controls.active {
+        display: flex;
+    }
+
+    /* Force all inputs to take up the full screen width on mobile */
+    .nav-input, .nav-select, .nav-btn, .inline-form {
+        width: 100%;
+        text-align: center; /* Center button text for better mobile tap targets */
+    }
+    
+    .inline-form button {
+        width: 100%;
+    }
+}
+
+/* RESPONSIVE BREAKPOINT: 4K TVs & Ultrawides (Screens larger than 2000px) */
+@media (min-width: 2000px) {
+    .top-nav {
+        /* Keep it centered and prevent it from stretching to infinity */
+        max-width: 1600px;
+        margin: 0 auto;
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+}
+
+
+/* PREMIUM MAP MODAL (DESERT THEME) */
+.map-modal {
+    margin: auto; /* Native HTML <dialog> centering */
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px rgba(58, 51, 44, 0.2); /* Tinted canyon shadow */
+    background: var(--card-white);
+    width: 95%;
+    max-width: 800px;
+    padding: 0;
+    color: var(--text-canyon);
+    font-size: 1.1rem; /* 10% larger base text */
+    overflow: hidden; /* Prevents the map from spilling over the rounded corners */
+}
+
+/* The Frosted Glass Background */
+.map-modal::backdrop {
+    background: rgba(58, 51, 44, 0.6); /* Deep canyon tint instead of pure black */
+    backdrop-filter: blur(8px);
+}
+
+.modal-header {
+    padding: 24px 30px; /* Generous breathing room */
+    background: var(--bg-sandstone);
+    border-bottom: 1px solid rgba(58, 51, 44, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem; /* Larger, bolder heading */
+    font-weight: 600;
+    color: var(--text-canyon);
+    margin: 0;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Force the map to scale up and fill the space */
+#filterMap {
+    height: 400px !important; /* Overrides the 500px inline HTML style */
+    width: 100%;
+    background: var(--bg-sandstone) !important; /* Looks cleaner than black while tiles load */
+}
+
+.radius-control {
+    padding: 24px 30px;
+    background: var(--card-white);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-weight: 500;
+}
+
+/* Chunkier, tactile slider */
+.radius-control input[type="range"] {
+    width: 100%;
+    height: 8px; 
+    border-radius: 4px;
+    background: var(--bg-sandstone);
+    accent-color: var(--accent-terracotta);
+    cursor: pointer;
+}
+
+.modal-footer {
+    padding: 24px 30px;
+    background: var(--bg-sandstone);
+    border-top: 1px solid rgba(58, 51, 44, 0.1);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Scaled up UI Buttons */
+#closeMap {
+    font-size: 1.5rem;
+    padding: 5px 15px;
+    color: var(--text-canyon);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+#closeMap:hover {
+    transform: scale(1.1);
+}
+
+#applyMapFilter {
+    font-size: 1.1rem;
+    padding: 12px 28px; /* Wider, taller click target */
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
