@@ -11,7 +11,7 @@ function extractPgtaData(data) {
     let jsonObj = {};
 
     // 1. Find and Extract TITLE
-    const titleIdx = data.indexOf(Buffer.from('TITL'));
+    const titleIdx = data.lastIndexOf(Buffer.from('TITL'));
     if (titleIdx !== -1) {
         const start = titleIdx + 8;
         const end = data.indexOf(0x00, start); // Find null terminator
@@ -95,4 +95,4 @@ async function processSnapmatic(fileBuffer, originalName, owner_id) {
     }
 }
 
-module.exports = {processSnapmatic}
+module.exports = { processSnapmatic }
