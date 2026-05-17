@@ -13,10 +13,11 @@ function validateSnapmaticContents(req, res, next) {
             return res.status(400).send(`Bad Request: File "${file.originalname}" is completely empty or corrupt.`);
         }
 
-        // B. Check for standard JPEG Magic Bytes (FF D8 FF) at index 0, 1, and 2
-        if (buffer[0] !== 0xFF || buffer[1] !== 0xD8 || buffer[2] !== 0xFF) {
-            console.error(`[VALIDATION BLOCKED] ${file.originalname} failed JPEG verification headers.`);
-            return res.status(400).send(`Bad Request: File "${file.originalname}" does not contain a valid JPEG structure.`);
+        const jpegStart = buffer.indexOf(Buffer.from([0xFF, 0xD8, 0xFF]));
+
+        if (jpegStart === -1) {
+            console.error(`[VALIDATION BLOCKED] ${file.originalname} does not contain valid JPEG magic bytes anywhere.`);
+            return res.status(400).send(`Bad Request: File "${file.originalname}" does not contain a valid embedded JPEG structure.`);
         }
 
         // C. Check if the file ends with the Rockstar 'JEND' marker string
