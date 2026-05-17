@@ -15,6 +15,15 @@ async function insertUserInDB(user_obj) {
     return queryResult
 }
 
+async function getUserID(email) {
+    const query = `SELECT id FROM users WHERE email = ?;`;
+    const values = [email]
+    const [queryResult] = await pool.execute(query, values);
+    return queryResult
+}
+
+
+
 async function fetchPasswordHash(email) {
     const query = `SELECT user_password_hash FROM users WHERE email = ?`;
     const values = [email]
@@ -22,4 +31,4 @@ async function fetchPasswordHash(email) {
     return queryResult
 }
 
-module.exports = {insertUserInDB, fetchPasswordHash}
+module.exports = { insertUserInDB, fetchPasswordHash, getUserID }
