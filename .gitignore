@@ -2,3 +2,4 @@
 node_modules/
 structure.txt
 uploads/
+*.txt
