@@ -1,37 +1,54 @@
 // controllers/upload.controller.js
 
+const { insertPhotoInDB } = require("../models/photo.model");
+const { processSnapmatic } = require("../utils/extractImg.util");
+const { v4: uuidv4 } = require('uuid');
+
 async function processUpload(req, res) {
     try {
-        // 1. Verify files actually exist in this specific request's memory tray
         if (!req.files || req.files.length === 0) {
             return res.status(400).send("No files uploaded.");
         }
 
-        // 2. Loop through the array to address each file object
+        const owner_id = req.user.id;
+        const failedUploads = []; // Array to trap bad files so the server doesn't crash
+
+        // Loop through the batch
         for (const file of req.files) {
-            
-            // This is how you address the metadata Multer generated:
-            console.log(`Processing file: ${file.originalname}`); // e.g., "PGTA5382910"
-            console.log(`MimeType: ${file.mimetype}`);             // e.g., "application/octet-stream"
-            console.log(`Size in RAM: ${file.size} bytes`);        // e.g., 345210 bytes
 
-            // This is how you address the RAW BYTES sitting in memory:
-            const rawBinaryBuffer = file.buffer; 
+            // 1. Extract the data
+            const photo_obj = await processSnapmatic(file.buffer, file.originalname, owner_id);
 
-            // Example of addressing specific bits using standard array indexing:
-            const byteOne = rawBinaryBuffer[0]; 
-            const byteTwo = rawBinaryBuffer[1];
-            
-            console.log(`First two bytes in hex: ${byteOne.toString(16)}, ${byteTwo.toString(16)}`);
-            
-            // ==========================================
-            // YOUR UPCOMING EXTRACTION LOGIC GOES HERE:
-            // ==========================================
-            // e.g., const jsonMetadata = extractJson(rawBinaryBuffer);
-            // e.g., const cleanJpeg = extractJpeg(rawBinaryBuffer);
+            // 2. GUARDRAIL: Did the extraction fail?
+            if (!photo_obj.success) {
+                console.error(`[EXTRACTION FAILED] ${file.originalname}: ${photo_obj.error}`);
+                failedUploads.push(file.originalname);
+                continue; // Skip DB insertion and move straight to the next file
+            }
+
+            // 3. Prep for Database
+            photo_obj['owner_id'] = owner_id;
+            photo_obj['id'] = uuidv4(); // Safe UUID for the row PK
+
+            // 4. Insert into MySQL
+            const photoInsRes = await insertPhotoInDB(photo_obj);
+
+            if (photoInsRes.affectedRows !== 1) {
+                console.error(`[DB INSERT FAILED] ${photo_obj.photo_name}`);
+                failedUploads.push(file.originalname);
+                // Do NOT send a res.status() here, just trap the error and keep looping
+            }
         }
 
-        res.status(200).send("All files processed from memory successfully.");
+        // 5. Final Response Execution
+        if (failedUploads.length > 0) {
+            console.warn(`[UPLOAD BATCH COMPLETED] with ${failedUploads.length} errors:`, failedUploads);
+            // Optional: You can redirect to an error page here if you want strict failure UX
+            return res.status(500).render('err', { err: `Failed to process: ${failedUploads.join(', ')}` });
+        }
+
+        // Only one response is sent, safely outside the loop
+        res.redirect('/home');
 
     } catch (err) {
         console.error("Upload controller crashed:", err);
