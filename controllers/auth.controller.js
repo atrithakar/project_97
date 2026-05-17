@@ -1,7 +1,7 @@
 const jwt =require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 const { v4: uuidv4 } = require('uuid');
-const { insertUserInDB, fetchPasswordHash } = require('../models/user.model');
+const { insertUserInDB, fetchPasswordHash, getUserID } = require('../models/user.model');
 
 async function handleLogout(req, res) {
     try {
@@ -66,7 +66,8 @@ async function handleLogin(req, res) {
         }
 
         const payload = {
-            email: email
+            email: email,
+            id: (await getUserID(email))[0]['id']
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' })
