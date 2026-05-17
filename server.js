@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/maps/gtav', express.static(path.join(__dirname, 'gta_map')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')));
 
