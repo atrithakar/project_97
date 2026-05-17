@@ -383,3 +383,27 @@ body {
     font-weight: 600;
     letter-spacing: 0.5px;
 }
+
+.feed-container {
+    display: grid;
+    /* This automatically creates as many columns as will fit, making it perfectly responsive */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px;
+    padding: 20px;
+}
+
+.pgta-card {
+    /* You can remove 'break-inside: avoid' now */
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.pgta-card img {
+    width: 100%;
+    height: auto;
+    display: block; /* Removes weird baseline gaps under images */
+}
