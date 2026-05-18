@@ -237,7 +237,7 @@ body {
 }
 
 /* RESPONSIVE BREAKPOINT: Tablets & Mobile (Screens smaller than 1024px) */
-@media (max-width: 1160px) {
+@media (max-width: 1375px) {
     .top-nav {
         flex-wrap: wrap; /* Allows the menu to drop below the logo */
         padding: 15px 20px;
