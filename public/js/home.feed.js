@@ -4,20 +4,67 @@ const limit = window.innerWidth < 768 ? 15 : 40; // Responsive limits
 let isLoading = false;
 let hasMore = true;
 
-const sessionSeed = Math.floor(Math.random() * 1000000);
+let sessionSeed = Math.floor(Math.random() * 1000000);
 
 // Target your specific container
 const feedContainer = document.querySelector('.feed-container');
 
+// Grab all your UI inputs
+const searchInput = document.querySelector('.nav-input');
+const timeSelect = document.querySelector('select[title="Filter by Time"]');
+const radioSelect = document.querySelector('select[title="Filter by Radio"]');
+const mapX = document.getElementById('map_x');
+const mapY = document.getElementById('map_y');
+const mapRadius = document.getElementById('map_radius');
+// const applyMapBtn = document.getElementById('applyMapFilter');
+
 // NOTE: You still need to add <div id="loading-anchor">Loading...</div> directly below your <main> tag in the HTML!
 const anchor = document.getElementById('loading-anchor');
+
+function applyFilters() {
+    // 1. Reset the pagination clock
+    currentPage = 1;
+    hasMore = true;
+
+    // 2. Scramble the seed for a fresh random slice of the filtered data
+    sessionSeed = Math.floor(Math.random() * 1000000);
+
+    // 3. Clear the DOM entirely
+    feedContainer.innerHTML = '';
+
+    // 4. Bring the loading anchor back to life
+    anchor.style.display = 'flex';
+    anchor.innerHTML = "<p>Loading more...</p>";
+
+    // 5. Fire the network request
+    fetchPhotos();
+}
 
 async function fetchPhotos() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
     try {
-        const res = await fetch(`/api/photos/feed?page=${currentPage}&limit=${limit}&seed=${sessionSeed}`);
+        // Build the base payload
+        const params = new URLSearchParams({
+            page: currentPage,
+            limit: limit,
+            seed: sessionSeed
+        });
+
+        // Conditionally attach filters ONLY if they have a value
+        if (searchInput.value.trim()) params.append('search', searchInput.value.trim()); 
+        if (timeSelect.value) params.append('time', timeSelect.value);
+        if (radioSelect.value) params.append('radio', radioSelect.value);
+        
+        if (mapX.value && mapY.value && mapRadius.value) {
+            params.append('map_x', mapX.value);
+            params.append('map_y', mapY.value);
+            params.append('map_radius', mapRadius.value);
+        }
+
+        // Fire the clean, perfectly formatted URL
+        const res = await fetch(`/api/photos/feed?${params.toString()}`);
         const json = await res.json();
 
         if (json.success) {
@@ -26,15 +73,15 @@ async function fetchPhotos() {
             // Empty Database Guard
             if (json.data.length === 0 && currentPage === 1) {
                 feedContainer.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center;">
-                        <h3>No photos yet!</h3>
-                        <p>Upload some Snapmatics to get started.</p>
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <h3>No photos found!</h3>
+                        <p>Try adjusting your filters or search area.</p>
                     </div>`;
                 anchor.style.display = 'none';
                 return;
             }
 
-            // Build the massive HTML string in memory first (extremely fast)
+            // Build and insert HTML
             const htmlChunks = json.data.map(photo => `
                 <div class="pgta-card">
                     <img src="/uploads/thumbnails/${photo.thumbnail_name}" alt="${photo.title}" loading="lazy">
@@ -45,19 +92,14 @@ async function fetchPhotos() {
                 </div>
             `).join('');
 
-            // Dump it into the DOM in one single paint operation
             feedContainer.insertAdjacentHTML('beforeend', htmlChunks);
-
             currentPage++;
         }
     } catch (err) {
         console.error("Failed to fetch feed:", err);
     } finally {
         isLoading = false;
-
-        // Sparse State / End of DB Guard
         if (!hasMore) {
-            // If the feed container has very few children, just hide the anchor quietly
             if (currentPage <= 2 && feedContainer.children.length < 10) {
                 anchor.style.display = 'none';
             } else {
@@ -73,6 +115,24 @@ const observer = new IntersectionObserver((entries) => {
         fetchPhotos();
     }
 }, { rootMargin: "200px" }); // Triggers slightly before they hit the bottom
+
+
+// Debounce for text search
+let searchTimeout = null;
+searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(applyFilters, 200);
+});
+
+// Instant triggers for dropdowns
+timeSelect.addEventListener('change', applyFilters);
+radioSelect.addEventListener('change', applyFilters);
+
+// Trigger for the Map modal
+applyMapBtn.addEventListener('click', () => {
+    applyFilters();
+    document.getElementById('mapModal').close(); 
+});
 
 // Start the engine
 if (anchor) {
