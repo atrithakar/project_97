@@ -53,10 +53,10 @@ async function fetchPhotos() {
         });
 
         // Conditionally attach filters ONLY if they have a value
-        if (searchInput.value.trim()) params.append('search', searchInput.value.trim()); 
+        if (searchInput.value.trim()) params.append('search', searchInput.value.trim());
         if (timeSelect.value) params.append('time', timeSelect.value);
         if (radioSelect.value) params.append('radio', radioSelect.value);
-        
+
         if (mapX.value && mapY.value && mapRadius.value) {
             params.append('map_x', mapX.value);
             params.append('map_y', mapY.value);
@@ -84,6 +84,7 @@ async function fetchPhotos() {
             // Build and insert HTML
             const htmlChunks = json.data.map(photo => `
                 <div class="pgta-card">
+                <input type="hidden" value="${photo.id}">
                     <img src="/uploads/thumbnails/${photo.thumbnail_name}" alt="${photo.title}" loading="lazy">
                     <div class="card-meta">
                         <span class="meta-user">${photo.username}</span>
@@ -131,7 +132,7 @@ radioSelect.addEventListener('change', applyFilters);
 // Trigger for the Map modal
 applyMapBtn.addEventListener('click', () => {
     applyFilters();
-    document.getElementById('mapModal').close(); 
+    document.getElementById('mapModal').close();
 });
 
 // Start the engine
@@ -140,3 +141,18 @@ if (anchor) {
 } else {
     console.error("CRITICAL: You forgot to put the <div id='loading-anchor'> at the bottom of your HTML!");
 }
+
+document.addEventListener('click', (event) => {
+    const card = event.target.closest('.pgta-card');
+
+    if (!card) return;
+    
+    const input = card.querySelector('input');
+    
+    if (input) {
+        console.log(input.value);
+        window.location.href = `/view/photo/${input.value}`; // For your new route
+    } else {
+        console.error("Input element not found inside this card.");
+    }
+});
