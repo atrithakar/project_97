@@ -7,18 +7,25 @@ async function getFeed(req, res) {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 40;
         const offset = (page - 1) * limit;
-        
-        // The seed guarantees consistent randomization across paginated requests
         const seed = parseInt(req.query.seed); 
 
-        const rows = await getFeedDB(offset, limit, seed)
+        // Harvest all optional filters from the URL
+        const filters = {
+            search: req.query.search || null,
+            time: req.query.time || null,
+            radio: req.query.radio || null,
+            mapX: req.query.map_x ? parseFloat(req.query.map_x) : null,
+            mapY: req.query.map_y ? parseFloat(req.query.map_y) : null,
+            mapRadius: req.query.map_radius ? parseFloat(req.query.map_radius) : null
+        };
 
-        // console.log(rows)
+        // Pass the single filters object to the DB
+        const rows = await getFeedDB(offset, limit, seed, filters);
 
         res.status(200).json({ 
             success: true, 
             data: rows,
-            hasMore: rows.length === limit // If we got 40 back, there's probably a page 2
+            hasMore: rows.length === limit
         });
 
     } catch (error) {
