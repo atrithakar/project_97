@@ -51,7 +51,10 @@ openMapBtn.addEventListener('click', () => {
                 crs: L.CRS.GTA,
                 minZoom: 0,
                 maxZoom: 5,
-                zoomControl: true
+                zoomControl: true,
+                wheelPxPerZoomLevel: 120,
+                zoomDelta: 1,
+                zoomSnap: 1
             });
 
             const bounds = [[0, 0], [-8192, 8192]];
