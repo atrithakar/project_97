@@ -76,4 +76,11 @@ async function getFeedDB(offset, limit, seed, filters) {
     return rows;
 }
 
-module.exports = { insertPhotoInDB, getFeedDB }
+async function getPhotoInfoDB(photo_id) {
+    const query = `SELECT p.id, p.owner_id, p.photo_name, p.title, p.coord_x, p.coord_y, p.game_time, p.clicked_at, p.uploaded_at, p.radio_station, u.username FROM photos p INNER JOIN users u ON p.owner_id = u.id WHERE p.id = ?;`;
+    const values = [photo_id]
+    const [queryResult] = await pool.execute(query, values)
+    return queryResult
+}
+
+module.exports = { insertPhotoInDB, getFeedDB, getPhotoInfoDB }
