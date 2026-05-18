@@ -20,27 +20,60 @@ async function insertPhotoInDB(photo_obj) {
     return queryResult
 }
 
-async function getFeedDB(offset, limit, seed) {
+async function getFeedDB(offset, limit, seed, filters) {
+    // 1. Base Query: JOIN the photos table with the users table to extract the username
+    let query = `
+        SELECT photos.*, users.username 
+        FROM photos 
+        JOIN users ON photos.owner_id = users.id 
+        WHERE 1=1
+    `;
+    const queryParams = [];
 
-    let orderBy = 'ORDER BY uploaded_at DESC'; // Default to newest first
-
-    if (seed) {
-        // MySQL RAND(N) produces a repeatable sequence based on the seed
-        orderBy = `ORDER BY RAND(${seed})`;
+    // 2. Text Search (Matches photo title OR the joined username)
+    if (filters.search) {
+        // We must specify photos.title and users.username to prevent ambiguity
+        query += ` AND (photos.title LIKE ? OR users.username LIKE ?)`;
+        queryParams.push(`%${filters.search}%`, `%${filters.search}%`);
     }
 
-    const query = `
-            SELECT p.id, u.username, p.thumbnail_name, p.photo_name, p.title, p.coord_x, p.coord_y 
-            FROM photos p
-            INNER JOIN users u
-            ON p.owner_id = u.id
-            ${orderBy} 
-            LIMIT ? OFFSET ?
-        `;
+    // 3. Radio Filter
+    if (filters.radio) {
+        query += ` AND photos.radio_station = ?`;
+        queryParams.push(filters.radio);
+    }
 
-    // Execute the query (assuming mysql2 promise wrapper)
-    const [queryResult] = await pool.query(query, [limit, offset]);
-    return queryResult
+    // 4. Time Filter (Strips the date and compares only the time)
+    if (filters.time) {
+        const [startTime, endTime] = filters.time.split('-');
+        query += ` AND TIME(photos.game_time) BETWEEN ? AND ?`;
+        // Appending seconds so you don't miss the 59th second of the minute
+        queryParams.push(`${startTime}:00`, `${endTime}:59`);
+    }
+
+    // 5. The Map Radius Filter (Euclidean Math)
+    if (filters.mapX !== null && filters.mapY !== null && filters.mapRadius !== null) {
+        query += ` AND (POW(photos.coord_x - ?, 2) + POW(photos.coord_y - ?, 2)) <= POW(?, 2)`;
+        queryParams.push(filters.mapX, filters.mapY, filters.mapRadius);
+    }
+
+    // 6. Consistent Randomization using the Seed
+    if (seed) {
+        query += ` ORDER BY RAND(?)`;
+        queryParams.push(seed);
+    } else {
+        // Explicitly defining photos.id so MySQL doesn't confuse it with users.id
+        query += ` ORDER BY photos.id DESC`; 
+    }
+
+    // 7. Pagination
+    query += ` LIMIT ? OFFSET ?`;
+    // Ensure these are passed as numbers, MySQL gets cranky if limits are strings
+    queryParams.push(Number(limit), Number(offset)); 
+
+    // Execute the query
+    const [rows] = await pool.query(query, queryParams);
+    return rows;
 }
 
 module.exports = { insertPhotoInDB, getFeedDB }
