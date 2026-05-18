@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Project 97 | Gallery</title>
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -25,7 +25,7 @@
         </button>
 
         <div class="nav-controls">
-            <input type="text" class="nav-input" placeholder="Search travelers...">
+            <input type="text" class="nav-input" placeholder="Search photos by title">
 
             <select class="nav-select" title="Filter by Time">
                 <option value="">Time: Any</option>
@@ -68,8 +68,31 @@
 
             <select class="nav-select" title="Filter by Radio">
                 <option value="">Radio: Any</option>
-                <option value="lsr">LS Rock Radio</option>
-                <option value="nsp">Non-Stop-Pop</option>
+                <option value="Radio Off">Radio Off</option>
+
+                <option value="RADIO_01_CLASS_ROCK">Los Santos Rock Radio</option>
+                <option value="RADIO_02_POP">Non-Stop-Pop FM</option>
+                <option value="RADIO_03_HIPHOP_NEW">Radio Los Santos</option>
+                <option value="RADIO_09_HIPHOP_OLD">West Coast Classics</option>
+                <option value="RADIO_04_PUNK">Channel X</option>
+                <option value="RADIO_18_90S_ROCK">Vinewood Boulevard Radio</option>
+                <option value="RADIO_06_COUNTRY">Rebel Radio</option>
+
+                <option value="RADIO_07_DANCE_01">Soulwax FM</option>
+                <option value="RADIO_14_DANCE_02">FlyLo FM</option>
+                <option value="RADIO_16_SILVERLAKE">Radio Mirror Park</option>
+                <option value="RADIO_20_THELAB">The Lab</option>
+                <option value="RADIO_13_JAZZ">Worldwide FM</option>
+
+                <option value="RADIO_15_MOTOWN">The Lowdown 91.1</option>
+                <option value="RADIO_17_FUNK">Space 103.2</option>
+                <option value="RADIO_12_REGGAE">The Blue Ark</option>
+
+                <option value="RADIO_08_MEXICAN">East Los FM</option>
+
+                <option value="RADIO_21_DLC_XM17">blonded Los Santos 97.8 FM</option>
+                <option value="RADIO_22_DLC_BATTLE_MIX1_RADIO">Los Santos Underground Radio (LSUR)</option>
+                <option value="RADIO_23_DLC_XM19_RADIO">iFruit Radio</option>
             </select>
 
             <button type="button" class="nav-btn btn-primary" id="openUploadModal">Upload</button>
