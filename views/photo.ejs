@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 97 | View Photo</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/photo.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <main class="photo-view-container">
+
+        <section class="photo-panel">
+            <figure class="image-wrapper">
+                <img src="/uploads/originals/<%= photo.photo_name %>" alt="Snapmatic capture of <%= photo.title %>">
+            </figure>
+
+            <div class="action-bar">
+                <button class="btn btn-primary" id="btnFavorite">Add to Favourites</button>
+                <button class="btn btn-secondary" id="btnDownload">Download Image</button>
+                <button class="btn btn-outline" id="btnProfile">View Owner's Profile</button>
+                <button class="btn btn-ghost" id="btnCopyCoords">Copy Coordinates</button>
+            </div>
+
+            <div class="metadata-grid">
+                <div class="meta-item">
+                    <span class="meta-label">Title</span>
+                    <span class="meta-value">
+                        <%= photo.title %>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Username of Owner</span>
+                    <span class="meta-value">
+                        <%= photo.username %>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Coordinates</span>
+                    <span class="meta-value">[<%= photo.coord_x %>, <%= photo.coord_y %>]</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Radio Station</span>
+                    <span class="meta-value">
+                        <%= photo.radio_station %>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">In-Game Time</span>
+                    <span class="meta-value">
+                        <%= photo.game_time %>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Clicked At</span>
+                    <span class="meta-value">
+                        <%= photo.clicked_at %>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Uploaded At</span>
+                    <span class="meta-value">
+                        <%= photo.uploaded_at %>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <aside class="map-panel">
+            <div id="staticMap" data-x="<%= photo.coord_x %>" data-y="<%= photo.coord_y %>"></div>
+        </aside>
+
+    </main>
+    <script src="/js/photo.map.js"></script>
+</body>
+
+</html>
