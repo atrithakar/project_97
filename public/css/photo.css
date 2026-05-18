@@ -1,0 +1,192 @@
+/* Put this in the <head> or your main stylesheet */
+.map-panel {
+    width: 100%;
+    /* Force a minimum height so the map doesn't collapse to 0px */
+    min-height: 400px;
+}
+
+#staticMap {
+    width: 100%;
+    height: 100%;
+    /* If using absolute/relative positioning in your grid, set a hard pixel height for testing */
+    height: 400px;
+    background-color: #000;
+    /* Good fallback for game maps before tiles load */
+}
+
+
+
+
+/* LAYOUT */
+.photo-view-container {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 30px;
+    padding: 40px;
+    /* max-width: 1400px; */
+    margin: 0 auto;
+}
+
+/* LEFT PANEL (IMAGE + DETAILS) */
+.photo-panel {
+    background: var(--card-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* IMAGE */
+.image-wrapper {
+    width: 100%;
+    /* width: 1200px; */
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-sandstone);
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ACTION BAR */
+.action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* BASE BUTTON */
+.btn {
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(58, 51, 44, 0.1);
+    background: var(--card-white);
+    color: var(--text-canyon);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* BUTTON VARIANTS (aligned with home.css) */
+.btn-primary {
+    background-color: var(--accent-terracotta);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #b56754;
+}
+
+.btn-secondary {
+    background-color: var(--accent-sage);
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #788a73;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent-sage);
+    color: var(--accent-sage);
+}
+
+.btn-outline:hover {
+    background: var(--accent-sage);
+    color: white;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: none;
+}
+
+.btn-ghost:hover {
+    background: rgba(58, 51, 44, 0.05);
+}
+
+/* METADATA GRID */
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.meta-item {
+    background: var(--bg-sandstone);
+    padding: 14px;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-canyon);
+    word-break: break-word;
+}
+
+/* MAP PANEL */
+.map-panel {
+    background: var(--card-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 16px;
+    display: flex;
+}
+
+#staticMap {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .photo-view-container {
+        grid-template-columns: 1fr;
+    }
+
+    .map-panel {
+        order: -1;
+    }
+
+    #staticMap {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    .metadata-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-bar {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
