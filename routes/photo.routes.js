@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateToken = require('../middlewares/authenticateToken.middleware');
-const getFeed = require('../controllers/photo.controller');
+const {getFeed} = require('../controllers/photo.controller');
 
 
 const router = express.Router();
