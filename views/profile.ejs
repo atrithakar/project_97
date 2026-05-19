@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 97 | <%= profileUser.username %>'s Profile</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+
+<body>
+
+    <main class="profile-container">
+        <header class="profile-header-card">
+            <div class="profile-avatar-placeholder">
+                <%= profileUser.username.substring(0, 2).toUpperCase() %>
+            </div>
+            <div class="profile-identity">
+                <h1 class="profile-name">
+                    <%= profileUser.first_name %>
+                        <%= profileUser.last_name %>
+                </h1>
+                <h2 class="profile-username">@<%= profileUser.username %>
+                </h2>
+
+                <% if (isOwner) { %>
+                    <div class="profile-actions">
+                        <button class="btn-edit-profile" onclick="window.location.href='/settings/profile'">Edit
+                            Profile</button>
+                    </div>
+                    <% } %>
+
+                        <% if (profileUser.profile_bio) { %>
+                            <p class="profile-bio">
+                                <%= profileUser.profile_bio %>
+                            </p>
+                            <% } else { %>
+                                <p class="profile-bio empty-bio">No bio provided yet.</p>
+                                <% } %>
+
+                                    <div class="profile-meta">
+                                        <span class="meta-joined">Joined: <span class="local-time"
+                                                data-utc="<%= new Date(profileUser.joined_at).toISOString() %>"></span></span>
+                                    </div>
+            </div>
+        </header>
+
+        <section class="profile-content-panel">
+            <nav class="tab-navigation">
+                <button class="tab-btn active" data-tab="uploads">📷 Uploaded Captures</button>
+                <button class="tab-btn" data-tab="favourites">❤️ Favourites</button>
+            </nav>
+
+            <div id="profileFeedContainer" class="feed-container">
+                <div class="feed-spinner">Loading captures...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/profile.tabs.js"></script>
+</body>
+
+</html>
