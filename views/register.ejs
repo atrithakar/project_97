@@ -8,11 +8,11 @@
 </head>
 <body>
     <h1>Project 97 - Sign Up</h1>
-    <form action="/signup" method="post" id="registration-form  ">
+    <form action="/signup" method="post" id="registration-form">
         <label for="firstname">First Name: </label>
         <input type="text" name="firstname" id="firstname" value="<%=locals.oldData?oldData.firstname:''%>">
         <div class="err" id="fnameErr"><%=locals.fnameErr?fnameErr:''%></div>
-        <!-- remember to add "required" attributes later -->
+
         <label for="lastname">Last Name: </label>
         <input type="text" name="lastname" id="lastname" value="<%=locals.oldData?oldData.lastname:''%>">
         <div class="err" id="lnameErr"><%=locals.lnameErr?lnameErr:''%></div>
