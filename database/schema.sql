@@ -36,3 +36,16 @@ CREATE TABLE IF NOT EXISTS photos(
     
     INDEX idx_coords (coord_x, coord_y)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;	
+
+
+CREATE TABLE IF NOT EXISTS favourites (
+    user_id CHAR(36) CHARACTER SET ascii NOT NULL,
+    photo_id CHAR(36) CHARACTER SET ascii NOT NULL,
+    created_at DATETIME DEFAULT (UTC_TIMESTAMP()),
+    
+    PRIMARY KEY (user_id, photo_id),
+    INDEX idx_photo_id (photo_id),
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (photo_id) REFERENCES photos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
