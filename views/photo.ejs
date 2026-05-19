@@ -51,19 +51,19 @@
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">In-Game Time</span>
-                    <span class="meta-value">
+                    <span class="meta-value" id="gameTimeDisplay">
                         <%= photo.game_time %>
                     </span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Clicked At</span>
-                    <span class="meta-value">
+                    <span class="meta-value local-time">
                         <%= photo.clicked_at %>
                     </span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Uploaded At</span>
-                    <span class="meta-value">
+                    <span class="meta-value local-time">
                         <%= photo.uploaded_at %>
                     </span>
                 </div>
@@ -79,6 +79,7 @@
     <script src="/js/photo.download.js"></script>
     <script src="/js/photo.copy.js"></script>
     <script src="/js/photo.favourite.js"></script>
+    <script src="/js/photo.tzCorrection.js"></script>
 </body>
 
 </html>
