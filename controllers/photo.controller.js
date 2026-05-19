@@ -1,6 +1,7 @@
 // controllers/photo.controller.js
 const db = require('../config/db');
 const { getFeedDB, getPhotoDB, getPhotoInfoDB } = require('../models/photo.model');
+const radioStations = require('../utils/radioMap.utils');
 
 async function getFeed(req, res) {
     try {
@@ -56,6 +57,8 @@ async function getPhotoInfo(req, res) {
                 message: "This Snapmatic capture does not exist or has been removed."
             });
         }
+
+        rows[0]['radio_station'] = radioStations[rows[0]['radio_station']]
 
         res.render('photo', { photo: rows[0] })
 
