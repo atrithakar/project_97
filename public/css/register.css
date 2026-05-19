@@ -1,12 +1,6 @@
-:root {
-    --bg-base: #050505;
-    --bg-surface: #0e0e11;
-    --border-dim: #27272a;
-    --text-main: #e4e4e7;
-    --text-muted: #a1a1aa;
-    --accent-neon: #00ffcc;
-    --error-red: #ff3366;
-}
+/* =========================================
+   PROJECT 97 - AUTHENTICATION STYLESHEET
+========================================= */
 
 * {
     box-sizing: border-box;
@@ -14,105 +8,169 @@
     padding: 0;
 }
 
+:root {
+    --bg-sandstone: #f4f1eb;
+    --text-canyon: #3a332c;
+    --accent-terracotta: #c87965;
+    --accent-sage: #8b9986;
+    --card-white: #ffffff;
+    --shadow-soft: 0 4px 20px rgba(58, 51, 44, 0.08);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* MACRO LAYOUT: Lock the form to the absolute center of the screen */
 body {
-    background-color: var(--bg-base);
-    color: var(--text-main);
-    /* Forces a raw, technical aesthetic */
-    font-family: 'Consolas', 'Courier New', monospace; 
+    background-color: var(--bg-sandstone);
+    color: var(--text-canyon);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    margin: 0;
     padding: 20px;
+    -webkit-font-smoothing: antialiased;
 }
 
 h1 {
-    font-size: 1.8rem;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    color: var(--text-main);
-    border-bottom: 2px solid var(--accent-neon);
-    padding-bottom: 10px;
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: var(--text-canyon);
+    letter-spacing: -0.5px;
+    font-weight: 700;
 }
 
+/* THE AUTH CARD */
 form {
-    background-color: var(--bg-surface);
+    background-color: var(--card-white);
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
     width: 100%;
-    max-width: 400px;
-    padding: 30px;
-    border: 1px solid var(--border-dim);
-    border-radius: 4px;
+    max-width: 450px;
+    
+    /* CSS Flexbox makes stacking inputs and labels flawless */
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    gap: 16px; 
 }
 
+/* TYPOGRAPHY: Form Labels */
 label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    display: block;
-    margin-bottom: 5px;
+    color: var(--accent-sage);
+    letter-spacing: 0.5px;
+    margin-bottom: -8px; /* Tucks the label closer to its specific input */
 }
 
+/* FORM INPUTS */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-    width: 100%;
-    background-color: var(--bg-base);
-    border: 1px solid var(--border-dim);
-    color: var(--accent-neon);
-    padding: 12px 15px;
-    font-family: inherit;
+    padding: 12px 16px;
     font-size: 1rem;
+    color: var(--text-canyon);
+    background-color: var(--bg-sandstone); /* Muted background until focused */
+    border: 1px solid rgba(58, 51, 44, 0.1);
+    border-radius: var(--radius-md);
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.25s ease;
+    font-family: inherit;
 }
 
-/* The Terminal Focus Effect */
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
-    border-color: var(--accent-neon);
-    box-shadow: 0 0 8px rgba(0, 255, 204, 0.1);
+    border-color: var(--accent-sage);
+    background-color: var(--card-white);
+    box-shadow: 0 0 0 3px rgba(139, 153, 134, 0.2); /* Sage focus ring */
 }
 
-/* Customizing the autofill background so it doesn't break the dark theme */
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px var(--bg-base) inset !important;
-    -webkit-text-fill-color: var(--accent-neon) !important;
+/* ERROR HANDLING (The Guardrails) */
+.err {
+    color: #d9534f; /* Standard critical error red */
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: -12px; /* Pulls the error tight against the bottom of the input */
+    
+    /* CRITICAL: Strict minimum height. 
+       If this is 0, the entire form will abruptly "jump" downward every time 
+       an error message appears. This locks the layout in place. */
+    min-height: 20px; 
 }
 
+/* SUBMIT BUTTON */
 input[type="submit"] {
-    background-color: transparent;
-    color: var(--accent-neon);
-    border: 1px solid var(--accent-neon);
-    padding: 12px;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    background-color: var(--accent-terracotta);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius-md);
     cursor: pointer;
     margin-top: 10px;
     transition: all 0.2s ease;
 }
 
 input[type="submit"]:hover {
-    background-color: var(--accent-neon);
-    color: var(--bg-base);
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+    background-color: #b56754;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
 }
 
-.err {
-    color: #ff3366; /* The error-red from the previous theme */
-    font-size: 0.75rem;
-    margin-top: -10px; /* Pull it closer to the input */
-    min-height: 1rem;
+/* ROUTING LINK */
+a {
+    margin-top: 32px;
+    color: var(--accent-sage);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-terracotta);
+    text-decoration: underline;
+}
+
+/* =========================================
+   RESPONSIVE DEGRADATION (< 600px)
+========================================= */
+@media (max-width: 600px) {
+    body {
+        padding: 16px; /* Reclaim edge space */
+    }
+
+    form {
+        padding: 24px 20px; /* Slash the internal form padding in half */
+        gap: 12px; /* Tighten the vertical spacing between inputs */
+    }
+
+    h1 {
+        font-size: 1.6rem; /* Scale down the header */
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    label {
+        font-size: 0.75rem; /* Slightly smaller labels */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        padding: 10px 12px;
+        font-size: 0.95rem; /* Prevent iOS from auto-zooming on inputs */
+    }
+
+    a {
+        margin-top: 24px;
+        font-size: 0.85rem;
+        text-align: center;
+    }
 }
