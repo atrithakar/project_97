@@ -2,6 +2,7 @@
 const db = require('../config/db');
 const { getFeedDB, getPhotoDB, getPhotoInfoDB } = require('../models/photo.model');
 const radioStations = require('../utils/radioMap.utils');
+const path = require('path')
 
 async function getFeed(req, res) {
     try {
@@ -68,4 +69,43 @@ async function getPhotoInfo(req, res) {
     }
 }
 
-module.exports = { getFeed, getPhotoInfo }
+async function downloadPhotoFile(req, res) {
+    try {
+        const photo_id = req.params.id;
+
+        // 1. Fetch the photo details from your MySQL database
+        const rows = await getPhotoInfoDB(photo_id); 
+        
+        if (!rows || rows.length === 0) {
+            return res.status(404).send("File not found.");
+        }
+
+        const photo = rows[0];
+        
+        // 2. Construct the absolute path to the physical image on disk
+        const filePath = path.join(__dirname, '../uploads/originals', photo.photo_name);
+
+        // 3. Create a clean, user-friendly download name 
+        // Sanitizes the user title so it doesn't break OS file naming rules
+        const sanitizedTitle = photo.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const downloadName = `${sanitizedTitle}_snapmatic.jpg`;
+
+        // 4. Force the OS download dialog
+        // Express will automatically read the stream, set headers, and prompt the browser
+        return res.download(filePath, downloadName, (err) => {
+            if (err) {
+                console.error("Error during file transmission:", err);
+                // If headers are already sent, we can't send a 500 status code
+                if (!res.headersSent) {
+                    return res.status(500).send("Could not transmit file.");
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error("[Download Router Error]:", err);
+        return res.status(500).send("Internal server error during download execution.");
+    }
+}
+
+module.exports = { getFeed, getPhotoInfo, downloadPhotoFile }
