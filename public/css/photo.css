@@ -190,3 +190,15 @@
         text-align: center;
     }
 }
+
+#btnFavorite {
+    background-color: transparent;
+    border: 1px solid rgba(58, 51, 44, 0.2);
+    color: var(--text-canyon);
+}
+
+#btnFavorite:hover {
+    border-color: var(--accent-terracotta);
+    color: var(--accent-terracotta);
+    background-color: rgba(200, 121, 101, 0.03); /* Tiny terracotta tint on hover */
+}
