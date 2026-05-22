@@ -9,11 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
         timeElement.innerText = cleanedTime;
     }
 
-    document.querySelectorAll('.local-time').forEach(el => {
-    const rawTime = el.innerHTML;
-    // The browser converts UTC to the user's physical timezone automatically
-    el.innerText = new Date(rawTime).toLocaleString(); 
-});
 });
 
 
