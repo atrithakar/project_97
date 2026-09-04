@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mysql:8.0
+    
+    container_name: db
+    
+    restart: unless-stopped
+    
+    env_file:
+      - .env.mysql
+    
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      - TZ=UTC
+
+  
+  app:
+    build: .
+
+    container_name: project_97
+
+    restart: unless-stopped
+
+    ports:
+      - "9797:9797"
+
+    env_file:
+      - .env
+
+    volumes:
+      - project_97_data:/app/uploads
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      - TZ=UTC
+
+
+
+volumes:
+  db_data:
+  project_97_data:
