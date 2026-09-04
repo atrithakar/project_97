@@ -24,7 +24,7 @@ services:
 
   
   app:
-    build: .
+    image: atrithakar/project_97-app:latest
 
     container_name: project_97
 
