@@ -1,4 +1,5 @@
 .env
+.env.mysql
 node_modules/
 uploads/
 *.txt
