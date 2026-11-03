@@ -3,8 +3,15 @@ require('dotenv').config();
 const router = require('./routes/index')
 const path = require('path')
 const cookieParser = require('cookie-parser');
+const logger = require('./utils/logger.util')
 
 const app = express();
+
+app.use((req, res, next) => {
+  logger.info(`Incoming request`, { method: req.method, path: req.path });
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
