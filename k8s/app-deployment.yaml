@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: project97
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.36
+          command: ["sh", "-c", "until nc -z db 3306; do echo waiting for db; sleep 2; done"]
+      containers:
+        - name: app
+          image: atrithakar/project_97-app:latest
+          ports:
+            - containerPort: 9797
+          envFrom:
+            - secretRef:
+                name: app-secret
+          env:
+            - name: TZ
+              value: UTC
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+          readinessProbe:
+            tcpSocket:
+              port: 9797
+            periodSeconds: 10
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: app-uploads

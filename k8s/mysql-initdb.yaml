@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+  init.sql: "CREATE DATABASE IF NOT EXISTS project97_db;\n\nUSE project97_db;\n\nCREATE
+    TABLE IF NOT EXISTS users(\n    id CHAR(36) CHARACTER SET ascii PRIMARY KEY,\n
+    \   first_name VARCHAR(50) NOT NULL,\n    last_name VARCHAR(50) NOT NULL,\n    username
+    VARCHAR(30) UNIQUE NOT NULL,\n    user_password_hash CHAR(60) NOT NULL,\n    email
+    VARCHAR(255) UNIQUE NOT NULL,\n    profile_bio VARCHAR(500),\n    joined_at DATETIME
+    DEFAULT (UTC_TIMESTAMP())\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;\n\nCREATE
+    TABLE IF NOT EXISTS photos(\n    id CHAR(36) CHARACTER SET ascii PRIMARY KEY,\n
+    \   owner_id CHAR(36) CHARACTER SET ascii NOT NULL,\n    photo_name VARCHAR(100)
+    UNIQUE NOT NULL,\n    thumbnail_name varchar(100) UNIQUE NOT NULL,\n    title
+    VARCHAR(100) NOT NULL,\n    coord_x DECIMAL(10, 5),\n    coord_y DECIMAL(10, 5),\n
+    \   coord_z DECIMAL(10, 5),\n    \n    game_time DATETIME,\n    clicked_at DATETIME
+    NOT NULL,\n    uploaded_at DATETIME DEFAULT (UTC_TIMESTAMP()),\n    \n    radio_station
+    VARCHAR(50) DEFAULT 'Radio Off',\n    \n    CONSTRAINT fk_owner_id\n    FOREIGN
+    KEY (owner_id)\n    REFERENCES users(id)\n    ON DELETE CASCADE,\n    \n    INDEX
+    idx_coords (coord_x, coord_y)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;\t\n\n\nCREATE
+    TABLE IF NOT EXISTS favourites (\n    user_id CHAR(36) CHARACTER SET ascii NOT
+    NULL,\n    photo_id CHAR(36) CHARACTER SET ascii NOT NULL,\n    created_at DATETIME
+    DEFAULT (UTC_TIMESTAMP()),\n    \n    PRIMARY KEY (user_id, photo_id),\n    INDEX
+    idx_photo_id (photo_id),\n    \n    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE,\n    FOREIGN KEY (photo_id) REFERENCES photos(id) ON DELETE
+    CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+kind: ConfigMap
+metadata:
+  name: mysql-initdb
+  namespace: project97
